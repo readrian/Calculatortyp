@@ -34,26 +34,33 @@ namespace Calculatortyp
             return new string(charArray1);
         }
 
-        static void calc(string input)
+        static string calc(string input)
         {
             char[] charArray = input.ToCharArray();
-            
+            int removed = 0;
+            int switchover = 0;
+            int counter1 = 1;
+            int counter2 = 0;
+            int switchcounter = 0;
             for (int i = 0; i < charArray.Length - 1; i++)
             {
-                int counter1 = 0;
-                int counter2 = 0;
+              
+                counter1 = 0;
+                counter2 = 0;
                 int c1m = 1, c2m = 1;
                 int temp = 0;
                 int r1 = 0, r2 = 0;
-                if (charArray[i] == '+' || charArray[i] == '-' || charArray[i] == '*' || charArray[i] == '/')
+
+
+                if (((charArray[i] == '*' || charArray[i] == '/') && switchover == 0) || (charArray[i] == '+' || charArray[i] == '-') && switchover == 1)
                 {
-                    for (int k = i + 1; !(charArray[k] == '+' || charArray[k] == '-' || charArray[k] == '*' || charArray[k] == '/'); k++)
+                    for (int k = i + 1; !(charArray[k] == '+' || charArray[k] == '-' || charArray[k] == '*' || charArray[k] == '/' || charArray[k] == '#'); k++)
                     {
                         counter1++;
                         if (k == charArray.Length - 1)
                             break;
                     }
-                    for (int k = i - 1; !(charArray[k] == '+' || charArray[k] == '-' || charArray[k] == '*' || charArray[k] == '/'); k--)
+                    for (int k = i - 1; !(charArray[k] == '+' || charArray[k] == '-' || charArray[k] == '*' || charArray[k] == '/' || charArray[k] == '#'); k--)
                     {
                         counter2++;
                         if (k == 0)
@@ -62,7 +69,7 @@ namespace Calculatortyp
 
                     for (int e = 0; e < counter1 - 1; e++)
                         c1m = c1m * 10;
-                    
+
                     for (int x = i + 1; x < i + counter1 + 1; x++)
                     {
                         temp = Convert.ToInt32(Char.GetNumericValue(charArray[x]));
@@ -106,34 +113,58 @@ namespace Calculatortyp
                     for (int x = i - counter2; x < (i - counter2 + cllen); x++)
                     {
                         charArray[x] = charArraytmp[z];
-                            z++;
+                        z++;
                     }
 
-                    int r = 0;      
+                    int r = 0;
                     for (int x = (i - counter2 + cllen); x < charArray.Length; x++)
                     {
-                        if ((i+counter1+1+r) == charArray.Length)
+                        if ((i + counter1 + 1 + r) == charArray.Length)
                         {
                             break;
                         }
-                        charArray[x] = charArray[i+counter1+1+r];
+                        charArray[x] = charArray[i + counter1 + 1 + r];
                         r++;
                     }
-
-                    Console.WriteLine(charArray);
+                    removed = (removed + counter1 + counter2 + 1) - cllen;
+                    for (int x = charArray.Length - removed; x < charArray.Length; x++)
+                    {
+                        charArray[x] = '#';
+                        i = -1;
+                        switchcounter = 0;
+                    }
+                    
+                }
+                if (counter1 == 0)
+                {
+                    switchcounter++;
                 }
 
-                
-                
+                if ((switchcounter >= (charArray.Length - 1)) && switchover == 0)
+                {
+                    switchover = 1;
+                    i = -1;
+                    switchcounter = 0;
+                }
+                if (switchcounter >= charArray.Length - 1 && switchover == 1)
+                {
+                    i = 99999;
+                }
             }
+            char[] charArray1 = new char[charArray.Length-removed];
+            for (int x = 0; x < charArray1.Length; x++)
+            {
+                charArray1[x] = charArray[x];
+            }
+            return new string(charArray1);
         }
+
 
         static void Main(string[] args)
         {
             string inp = input();
             inp = rems(inp);
-            //Console.WriteLine(inp);
-            calc(inp);
+            Console.WriteLine(calc(inp));
         }
     }
 }
