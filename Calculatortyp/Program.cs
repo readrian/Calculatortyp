@@ -97,8 +97,7 @@ namespace Calculatortyp
                             break;
                     }
                     int cllen = cl.ToString().Length;
-                    Console.WriteLine(cllen);
-                    Console.WriteLine(cl);
+
                     string scl = cl.ToString();
 
                     char[] charArraytmp = scl.ToCharArray();
@@ -109,10 +108,14 @@ namespace Calculatortyp
                         charArray[x] = charArraytmp[z];
                             z++;
                     }
-                    Console.WriteLine(charArray);
-                    int r = 0;      //Unfinished!!
-                    for (int x = (i - counter2 + cllen + 1); x < charArray.Length; x++)
+
+                    int r = 0;      
+                    for (int x = (i - counter2 + cllen); x < charArray.Length; x++)
                     {
+                        if ((i+counter1+1+r) == charArray.Length)
+                        {
+                            break;
+                        }
                         charArray[x] = charArray[i+counter1+1+r];
                         r++;
                     }
